@@ -10,6 +10,9 @@ jobs:
   test:
     name: Typecheck, Test, Build
     runs-on: ubuntu-latest
+    env:
+      DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+      DEEPSEEK_MODEL: ${{ vars.DEEPSEEK_MODEL || 'deepseek-v4-flash' }}
 
     steps:
       - name: Checkout
