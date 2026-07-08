@@ -17,6 +17,7 @@ This repository starts with the lowest-risk foundation:
 2. OpenAI-compatible non-streaming chat support.
 3. SSE parser for streaming responses.
 4. Basic response normalization tests.
+5. Optional DeepSeek integration testing through `DEEPSEEK_API_KEY`.
 
 Tool execution and the full tool loop will be added after the transport layer is stable.
 
