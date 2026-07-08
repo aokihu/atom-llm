@@ -50,7 +50,7 @@ export type LLMStreamEvent =
   | { type: "finish"; reason: LLMFinishReason; usage?: LLMUsage }
   | { type: "error"; error: Error };
 
-export type FetchLike = typeof fetch;
+export type FetchLike = (input: string | URL | Request, init?: RequestInit) => Promise<Response>;
 
 export type LLMChatRequest = {
   provider?: string;
