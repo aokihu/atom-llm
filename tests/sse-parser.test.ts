@@ -13,7 +13,7 @@ function streamFromChunks(chunks: string[]): ReadableStream<Uint8Array> {
 
 describe("parseSSEStream", () => {
   test("parses a single json event", async () => {
-    const events = [];
+    const events: any[] = [];
     for await (const event of parseSSEStream(streamFromChunks([
       'data: {"hello":"world"}\n\n',
     ]))) {
@@ -24,7 +24,7 @@ describe("parseSSEStream", () => {
   });
 
   test("parses json split across chunks", async () => {
-    const events = [];
+    const events: any[] = [];
     for await (const event of parseSSEStream(streamFromChunks([
       'data: {"hel',
       'lo":"world"}\n\n',
@@ -36,7 +36,7 @@ describe("parseSSEStream", () => {
   });
 
   test("parses multiple events in one chunk", async () => {
-    const events = [];
+    const events: any[] = [];
     for await (const event of parseSSEStream(streamFromChunks([
       'data: {"a":1}\n\ndata: {"b":2}\n\n',
     ]))) {
@@ -50,7 +50,7 @@ describe("parseSSEStream", () => {
   });
 
   test("parses done marker", async () => {
-    const events = [];
+    const events: any[] = [];
     for await (const event of parseSSEStream(streamFromChunks([
       "data: [DONE]\n\n",
     ]))) {
@@ -61,7 +61,7 @@ describe("parseSSEStream", () => {
   });
 
   test("returns error event for malformed json", async () => {
-    const events = [];
+    const events: any[] = [];
     for await (const event of parseSSEStream(streamFromChunks([
       "data: {bad}\n\n",
     ]))) {
