@@ -139,15 +139,18 @@ export class OpenAICompatibleProvider implements LLMProvider {
 
   async #post(request: LLMChatRequest, stream: boolean): Promise<Response> {
     const body = toOpenAIRequestBody(request, stream);
-    const res = await this.#fetch(`${request.baseUrl?.replace(/\/$/, "") ?? this.#baseUrl}${this.#chatPath}`, {
+    const init: RequestInit = {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${request.apiKey}`,
       },
       body: JSON.stringify(body),
-      signal: request.abortSignal,
-    });
+    };
+
+    if (request.abortSignal) init.signal = request.abortSignal;
+
+    const res = await this.#fetch(`${request.baseUrl?.replace(/\/$/, "") ?? this.#baseUrl}${this.#chatPath}`, init);
 
     if (!res.ok) {
       const text = await res.text().catch(() => "");
