@@ -33,3 +33,7 @@ bun run build
 ## Design boundary
 
 Provider adapters only handle protocol conversion and event normalization. Tool permission, approval, audit logging, and execution loops should live above the provider layer.
+
+## CI verification
+
+Pull requests run the same CI workflow used by main.
