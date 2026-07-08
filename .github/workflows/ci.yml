@@ -25,7 +25,16 @@ jobs:
         run: bun install
 
       - name: Typecheck
-        run: bun run typecheck
+        run: |
+          set -o pipefail
+          bun run typecheck 2>&1 | tee typecheck.log
+
+      - name: Upload typecheck log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: typecheck-log
+          path: typecheck.log
 
       - name: Test
         run: bun test
