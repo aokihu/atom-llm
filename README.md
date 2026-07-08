@@ -17,6 +17,7 @@ This repository starts with the lowest-risk foundation:
 2. OpenAI-compatible non-streaming chat support.
 3. SSE parser for streaming responses.
 4. Basic response normalization tests.
+5. Optional DeepSeek integration testing through `DEEPSEEK_API_KEY`.
 
 Tool execution and the full tool loop will be added after the transport layer is stable.
 
@@ -32,3 +33,7 @@ bun run build
 ## Design boundary
 
 Provider adapters only handle protocol conversion and event normalization. Tool permission, approval, audit logging, and execution loops should live above the provider layer.
+
+## CI verification
+
+Pull requests run the same CI workflow used by main.
