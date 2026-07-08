@@ -227,14 +227,20 @@ function normalizeChatResponse(raw: any): LLMChatResponse {
   if (!choice) throw new LLMProtocolError("Chat response has no choices", raw);
 
   const message = choice.message ?? {};
-  return {
+  const response: LLMChatResponse = {
     text: normalizeContent(message.content),
-    reasoningContent: normalizeOptionalContent(message.reasoning_content ?? message.reasoning ?? message.reasoningContent),
     toolCalls: normalizeToolCalls(message.tool_calls),
     finishReason: normalizeFinishReason(choice.finish_reason),
-    usage: normalizeUsage(raw?.usage),
     raw,
   };
+
+  const reasoningContent = normalizeOptionalContent(message.reasoning_content ?? message.reasoning ?? message.reasoningContent);
+  if (reasoningContent) response.reasoningContent = reasoningContent;
+
+  const usage = normalizeUsage(raw?.usage);
+  if (usage) response.usage = usage;
+
+  return response;
 }
 
 function normalizeToolCalls(raw: unknown): LLMToolCall[] {
@@ -265,11 +271,17 @@ function toToolCall(item: PendingToolCall): LLMToolCall {
 
 function normalizeUsage(raw: any): LLMUsage | undefined {
   if (!raw) return undefined;
-  return {
-    promptTokens: raw.prompt_tokens ?? raw.promptTokens,
-    completionTokens: raw.completion_tokens ?? raw.completionTokens,
-    totalTokens: raw.total_tokens ?? raw.totalTokens,
-  };
+
+  const usage: LLMUsage = {};
+  const promptTokens = raw.prompt_tokens ?? raw.promptTokens;
+  const completionTokens = raw.completion_tokens ?? raw.completionTokens;
+  const totalTokens = raw.total_tokens ?? raw.totalTokens;
+
+  if (typeof promptTokens === "number") usage.promptTokens = promptTokens;
+  if (typeof completionTokens === "number") usage.completionTokens = completionTokens;
+  if (typeof totalTokens === "number") usage.totalTokens = totalTokens;
+
+  return Object.keys(usage).length > 0 ? usage : undefined;
 }
 
 function normalizeFinishReason(raw: unknown): LLMFinishReason {
