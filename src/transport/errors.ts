@@ -18,7 +18,7 @@ export class LLMHTTPError extends LLMError {
 }
 
 export class LLMProtocolError extends LLMError {
-  readonly raw?: unknown;
+  readonly raw: unknown | undefined;
 
   constructor(message: string, raw?: unknown) {
     super(message);
